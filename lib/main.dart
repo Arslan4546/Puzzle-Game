@@ -7,25 +7,22 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter',
+      debugShowCheckedModeBanner: false,
+      title: 'Puzzle Game',
       theme: ThemeData(
-
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Game Play'),
+      home: const MyHomePage(title: 'Puzzle Game'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
-
 
   final String title;
 
@@ -34,45 +31,347 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  int _count = 0;
+  List<String?> tiles = [
+    'Assets/Images/1.png',
+    'Assets/Images/2.png',
+    'Assets/Images/3.png',
+    'Assets/Images/4.png',
+    'Assets/Images/5.png',
+    'Assets/Images/6.png',
+    'Assets/Images/7.png',
+    'Assets/Images/8.png',
+    null, // This represents the empty slot
+  ];
 
-  void _incrementCounter() {
+  // Function to reset the tiles to the original state
+  void resetTiles() {
     setState(() {
-
-      _counter++;
+      tiles = [
+        'Assets/Images/8.png',
+        'Assets/Images/7.png',
+        'Assets/Images/6.png',
+        'Assets/Images/5.png',
+        'Assets/Images/4.png',
+        'Assets/Images/3.png',
+        'Assets/Images/2.png',
+        'Assets/Images/1.png',
+        null, // Reset empty slot
+      ];
+      _count = 0; // Reset the attempt counter
     });
+  }
+
+  // Function to show the dialog box when 50 attempts are reached
+  void showAttemptsDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey,
+          elevation: 7,
+          title: const Text("Game Over!",style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold
+          ),),
+          content: const Text("You have used your 50 attempts!",style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                resetTiles(); // Optional: Reset the puzzle if needed
+              },
+              child: const Text("OK",style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Function to move a tile if it is adjacent to the empty slot
+  void moveTile(int index) {
+    int emptyIndex = tiles.indexOf(null);
+
+    // Calculate possible moves (left, right, up, down)
+    List<int> possibleMoves = [
+      index - 1, // Left
+      index + 1, // Right
+      index - 3, // Up
+      index + 3, // Down
+    ];
+
+    // Check if the empty index is a valid adjacent move
+    if (possibleMoves.contains(emptyIndex)) {
+      setState(() {
+        // Swap the tiles
+        tiles[emptyIndex] = tiles[index];
+        tiles[index] = null;
+        _count++;
+
+        // Show dialog if 50 attempts are reached
+        if (_count == 2) {
+          showAttemptsDialog();
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
-        title: Text(widget.title),
+        backgroundColor: Colors.grey,
+        title: Text(
+          widget.title,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Center(
-
         child: Column(
-
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          children: [
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: const BoxDecoration(
+                          color: Colors.grey,
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(3, 3),
+                              blurRadius: 3,
+                              spreadRadius: 4,
+                              color: Colors.white,
+                            ),
+                            BoxShadow(
+                              offset: Offset(-3, -3),
+                              blurRadius: 3,
+                              spreadRadius: 4,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                        child: const Center(
+                          child: Text(
+                            " You Have Only 50 \n Attempts To Solve ",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: const BoxDecoration(
+                          color: Colors.grey,
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(3, 3),
+                              blurRadius: 3,
+                              spreadRadius: 4,
+                              color: Colors.white,
+                            ),
+                            BoxShadow(
+                              offset: Offset(-3, -3),
+                              blurRadius: 3,
+                              spreadRadius: 4,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Text(
+                            " Attempts Count : \n              $_count",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Container(
+                      height: 30,
+                      width: 205,
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(3, 3),
+                            blurRadius: 3,
+                            spreadRadius: 4,
+                            color: Colors.white,
+                          ),
+                          BoxShadow(
+                            offset: Offset(-3, -3),
+                            blurRadius: 3,
+                            spreadRadius: 4,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Text(
+                          " Original Picture",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      height: 110,
+                      width: 205,
+                      decoration: const BoxDecoration(
+                        color: Colors.grey,
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(3, 3),
+                            blurRadius: 3,
+                            spreadRadius: 4,
+                            color: Colors.white,
+                          ),
+                          BoxShadow(
+                            offset: Offset(-3, -3),
+                            blurRadius: 3,
+                            spreadRadius: 4,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                      child: const Image(
+                        image: AssetImage("Assets/Images/Elephant.png"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
+                )
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            Container(
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(3, 3),
+                    blurRadius: 3,
+                    spreadRadius: 4,
+                    color: Colors.black,
+                  ),
+                  BoxShadow(
+                    offset: Offset(-3, -3),
+                    blurRadius: 3,
+                    spreadRadius: 4,
+                    color: Colors.black,
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      buildTile(0),
+                      buildTile(1),
+                      buildTile(2),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      buildTile(3),
+                      buildTile(4),
+                      buildTile(5),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      buildTile(6),
+                      buildTile(7),
+                      buildTile(8),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        onPressed: resetTiles,
+        backgroundColor: Colors.grey,
+        tooltip: 'Reset Puzzle',
+        child: const Icon(Icons.refresh, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget buildTile(int index) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => moveTile(index),
+        child: Container(
+          height: 80,
+          margin: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: tiles[index] != null ? Colors.white : Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(
+                offset: Offset(3, 3),
+                blurRadius: 3,
+                spreadRadius: 4,
+                color: Colors.white,
+              ),
+              BoxShadow(
+                offset: Offset(-3, -3),
+                blurRadius: 3,
+                spreadRadius: 4,
+                color: Colors.black,
+              ),
+            ],
+          ),
+          alignment: Alignment.center,
+          child: tiles[index] != null
+              ? Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              image: DecorationImage(
+                image: AssetImage(tiles[index]!),
+                fit: BoxFit.fill,
+              ),
+            ),
+          )
+              : Container(),
+        ),
       ),
     );
   }

@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Puzzle Game',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Puzzle Game'),
-    );
-  }
-}
+import 'package:google_fonts/google_fonts.dart';
+//
+// void main() {
+//   runApp(const MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       title: 'Puzzle Game',
+//       theme: ThemeData(
+//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+//         useMaterial3: true,
+//       ),
+//       home: const MyHomePage(title: 'Puzzle Game'),
+//     );
+//   }
+// }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -33,14 +34,14 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _count = 0;
   List<String?> tiles = [
-    'Assets/Images/1.png',
-    'Assets/Images/2.png',
-    'Assets/Images/3.png',
-    'Assets/Images/4.png',
     'Assets/Images/5.png',
     'Assets/Images/6.png',
-    'Assets/Images/7.png',
     'Assets/Images/8.png',
+    'Assets/Images/7.png',
+    'Assets/Images/4.png',
+    'Assets/Images/2.png',
+    'Assets/Images/1.png',
+    'Assets/Images/3.png',
     null, // This represents the empty slot
   ];
 
@@ -48,14 +49,14 @@ class _MyHomePageState extends State<MyHomePage> {
   void resetTiles() {
     setState(() {
       tiles = [
-        'Assets/Images/8.png',
-        'Assets/Images/7.png',
-        'Assets/Images/6.png',
-        'Assets/Images/5.png',
-        'Assets/Images/4.png',
-        'Assets/Images/3.png',
-        'Assets/Images/2.png',
         'Assets/Images/1.png',
+        'Assets/Images/2.png',
+        'Assets/Images/3.png',
+        'Assets/Images/4.png',
+        'Assets/Images/5.png',
+        'Assets/Images/6.png',
+        'Assets/Images/7.png',
+        'Assets/Images/8.png',
         null, // Reset empty slot
       ];
       _count = 0; // Reset the attempt counter
@@ -68,26 +69,33 @@ class _MyHomePageState extends State<MyHomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Colors.grey,
+          backgroundColor: Colors.white,
           elevation: 7,
-          title: const Text("Game Over!",style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold
-          ),),
-          content: const Text("You have used your 50 attempts!",style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),),
+          title: Text("Game Over!",
+              style: GoogleFonts.aBeeZee(
+                textStyle: const TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold),
+              )),
+          content: Text("You have used your 30 attempts!",
+              style: GoogleFonts.aBeeZee(
+                textStyle: const TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                ),
+              )),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
                 resetTiles(); // Optional: Reset the puzzle if needed
               },
-              child: const Text("OK",style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),),
+              child: const Text(
+                "OK",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ],
         );
@@ -116,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _count++;
 
         // Show dialog if 50 attempts are reached
-        if (_count == 2) {
+        if (_count == 30) {
           showAttemptsDialog();
         }
       });
@@ -128,14 +136,14 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey,
-        title: Text(
-          widget.title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
+        title: Text(widget.title,
+            style: GoogleFonts.lovedByTheKing(
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+              ),
+            )),
         centerTitle: true,
       ),
       body: Center(
@@ -167,14 +175,14 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ],
                         ),
-                        child: const Center(
-                          child: Text(
-                            " You Have Only 50 \n Attempts To Solve ",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                        child: Center(
+                          child: Text(" You Have Only 30 \n Attempts To Solve ",
+                              style: GoogleFonts.aBeeZee(
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )),
                         ),
                       ),
                     ),
@@ -200,13 +208,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                         child: Center(
-                          child: Text(
-                            " Attempts Count : \n              $_count",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          child:
+                              Text(" Attempts Count : \n              $_count",
+                                  style: GoogleFonts.aBeeZee(
+                                    textStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )),
                         ),
                       ),
                     ),
@@ -216,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Container(
                       height: 30,
-                      width: 205,
+                      width: 180,
                       decoration: const BoxDecoration(
                         color: Colors.grey,
                         boxShadow: [
@@ -234,20 +243,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ],
                       ),
-                      child: const Center(
-                        child: Text(
-                          " Original Picture",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                      child: Center(
+                        child: Text(" Original Picture",
+                            style: GoogleFonts.aBeeZee(
+                              textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )),
                       ),
                     ),
                     const SizedBox(height: 20),
                     Container(
                       height: 110,
-                      width: 205,
+                      width: 180,
                       decoration: const BoxDecoration(
                         color: Colors.grey,
                         boxShadow: [
@@ -285,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     offset: Offset(3, 3),
                     blurRadius: 3,
                     spreadRadius: 4,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                   BoxShadow(
                     offset: Offset(-3, -3),
@@ -340,7 +349,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: () => moveTile(index),
         child: Container(
           height: 80,
-          margin: const EdgeInsets.all(6),
+          margin: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             color: tiles[index] != null ? Colors.white : Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -362,14 +371,14 @@ class _MyHomePageState extends State<MyHomePage> {
           alignment: Alignment.center,
           child: tiles[index] != null
               ? Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                image: AssetImage(tiles[index]!),
-                fit: BoxFit.fill,
-              ),
-            ),
-          )
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    image: DecorationImage(
+                      image: AssetImage(tiles[index]!),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                )
               : Container(),
         ),
       ),
